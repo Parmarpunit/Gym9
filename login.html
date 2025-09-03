@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Ghost Fitness</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1 class="logo">GHOST FITNESS</h1>
+      <button id="menu-toggle" aria-label="Toggle menu">☰</button>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#plans">Plans</a></li>
+          <li><a href="index.html#trainers">Trainers</a></li>
+          <li><a href="index.html#bmi">BMI</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="auth-container">
+        <div class="auth-card">
+          <h2>Welcome Back</h2>
+          <p>Login to your Ghost Fitness account</p>
+
+          <form id="loginForm" class="auth-form">
+            <div class="form-group">
+              <label for="username">Username or Email</label>
+              <input type="text" id="username" name="username" required />
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+
+          <div class="auth-links">
+            <p>
+              Don't have an account? <a href="register.html">Register here</a>
+            </p>
+          </div>
+
+          <div id="message" class="message"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Ghost Fitness. All rights reserved.</p>
+    </footer>
+
+    <script>
+      // API Configuration
+      const API_BASE_URL = "http://localhost:8000/api";
+
+      // Login form handler
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+          const messageDiv = document.getElementById("message");
+
+          try {
+            const response = await fetch(`${API_BASE_URL}/login`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                username: username,
+                password: password,
+              }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              // Store user data in localStorage
+              localStorage.setItem("user", JSON.stringify(data.user));
+              localStorage.setItem("isLoggedIn", "true");
+
+              messageDiv.innerHTML = `<div class="success">${data.message}</div>`;
+              messageDiv.style.display = "block";
+
+              // Redirect to dashboard after 2 seconds
+              setTimeout(() => {
+                window.location.href = "dashboard.html";
+              }, 500);
+            } else {
+              messageDiv.innerHTML = `<div class="error">${data.message}</div>`;
+              messageDiv.style.display = "block";
+            }
+          } catch (error) {
+            messageDiv.innerHTML = `<div class="error">Connection error. Please check if the server is running.</div>`;
+            messageDiv.style.display = "block";
+          }
+        });
+
+      // Mobile menu toggle
+      document.getElementById("menu-toggle").addEventListener("click", () => {
+        document.querySelector("nav ul").classList.toggle("show");
+      });
+    </script>
+  </body>
+</html>

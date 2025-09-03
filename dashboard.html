@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Ghost Fitness</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Ghost Fitness Theme - Black & Gold */
+      body {
+        background-color: #000 !important;
+        color: #ffd700 !important;
+      }
+
+      .dashboard-container {
+        background-color: #000;
+        color: #ffd700;
+      }
+
+      .dashboard-card {
+        background-color: #111 !important;
+        border: 2px solid #ffd700 !important;
+        color: #ffd700 !important;
+      }
+
+      .dashboard-card h3 {
+        color: #ffd700 !important;
+        border-bottom: 2px solid #ffd700;
+        padding-bottom: 10px;
+      }
+
+      /* Enhanced Payment Status Styling - Ghost Theme */
+      .payment-status-item {
+        padding: 15px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #111 0%, #222 100%);
+        border: 2px solid #ffd700;
+        color: #ffd700;
+      }
+
+      /* Membership Status Card Styling - Ghost Theme */
+      .membership-status-card {
+        background: linear-gradient(135deg, #111 0%, #222 100%);
+        border: 2px solid #ffd700;
+        color: #ffd700;
+      }
+
+      .membership-status-card h3 {
+        color: #ffd700 !important;
+        margin-bottom: 20px;
+      }
+
+      .membership-status-display {
+        text-align: center;
+      }
+
+      .status-active {
+        background: linear-gradient(135deg, #0d4f0d 0%, #1a5f1a 100%);
+        color: #ffd700;
+        padding: 20px;
+        border-radius: 15px;
+        border: 2px solid #28a745;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+      }
+
+      .status-pending {
+        background: linear-gradient(135deg, #4a3c00 0%, #6b4f00 100%);
+        color: #ffd700;
+        padding: 20px;
+        border-radius: 15px;
+        border: 2px solid #ffc107;
+        box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+      }
+
+      .status-rejected {
+        background: linear-gradient(135deg, #4a0000 0%, #6b0000 100%);
+        color: #ffd700;
+        padding: 20px;
+        border-radius: 15px;
+        border: 2px solid #dc3545;
+        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+      }
+
+      .status-none {
+        background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+        color: #ffd700;
+        padding: 20px;
+        border-radius: 15px;
+        border: 2px solid #6c757d;
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+      }
+
+      .status-icon {
+        font-size: 3em;
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      .status-title {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #ffd700;
+      }
+
+      .status-subtitle {
+        font-size: 1.1em;
+        opacity: 0.9;
+        margin-bottom: 15px;
+        color: #ffd700;
+      }
+
+      .status-details {
+        font-size: 0.95em;
+        opacity: 0.8;
+        line-height: 1.4;
+        color: #ffd700;
+      }
+
+      .status-loading {
+        color: #ffd700;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .refresh-btn {
+        background: rgba(255, 215, 0, 0.2) !important;
+        color: #ffd700 !important;
+        border: 2px solid #ffd700 !important;
+        padding: 8px 12px !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        font-size: 0.9em !important;
+      }
+
+      .refresh-btn:hover {
+        background: rgba(255, 215, 0, 0.3) !important;
+      }
+      
+      .status-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #ffd700;
+      }
+      
+      .status-details p {
+        margin: 8px 0;
+        font-size: 0.95em;
+        color: #ffd700;
+      }
+      
+      .pending-notice, .rejected-notice {
+        border-radius: 8px;
+        margin-top: 15px;
+        border: 1px solid #ffd700;
+      }
+      
+      /* Membership History Styling - Ghost Theme */
+      .membership-item {
+        background: linear-gradient(135deg, #111 0%, #222 100%);
+        border: 1px solid #ffd700;
+        color: #ffd700;
+      }
+      
+      .membership-item:hover {
+        border-color: #fff;
+      }
+      
+      .membership-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      
+      .membership-details p {
+        margin: 5px 0;
+        color: #ffd700;
+      }
+
+      .membership-plan {
+        color: #ffd700 !important;
+      }
+
+      .membership-status {
+        color: #ffd700 !important;
+      }
+      
+      /* Form Styling - Ghost Theme */
+      .bmi-form input, .bmi-form button {
+        background-color: #111 !important;
+        color: #ffd700 !important;
+        border: 2px solid #ffd700 !important;
+      }
+
+      .bmi-form input:focus {
+        border-color: #fff !important;
+      }
+
+      .btn {
+        background-color: #ffd700 !important;
+        color: #000 !important;
+        border: 2px solid #ffd700 !important;
+      }
+
+      .btn:hover {
+        background-color: #fff !important;
+        color: #000 !important;
+      }
+
+      .btn-secondary {
+        background-color: #111 !important;
+        color: #ffd700 !important;
+        border: 2px solid #ffd700 !important;
+      }
+
+      .btn-secondary:hover {
+        background-color: #ffd700 !important;
+        color: #000 !important;
+      }
+      
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .membership-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        
+        .membership-status {
+          float: none !important;
+          margin-top: 5px;
+        }
+      }
+
+      /* Header styling to match theme */
+      header {
+        background-color: #111 !important;
+        border-bottom: 2px solid #ffd700;
+      }
+
+      .logo {
+        color: #ffd700 !important;
+      }
+
+      nav a {
+        color: #ffd700 !important;
+      }
+
+      nav a:hover {
+        color: #fff !important;
+      }
+
+      /* Footer styling */
+      footer {
+        background-color: #111 !important;
+        color: #ffd700 !important;
+        border-top: 2px solid #ffd700;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 class="logo">GHOST FITNESS</h1>
+      <button id="menu-toggle" aria-label="Toggle menu">☰</button>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#plans">Plans</a></li>
+          <li><a href="index.html#trainers">Trainers</a></li>
+          <li><a href="index.html#bmi">BMI</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+          <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="dashboard-container">
+        <div class="dashboard-header">
+          <h2>Welcome, <span id="userName">User</span>!</h2>
+          <p>Track your fitness journey and manage your membership</p>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- User Info Card -->
+          <div class="dashboard-card">
+            <h3>👤 Profile Information</h3>
+            <div class="user-info">
+              <p><strong>Username:</strong> <span id="userUsername">-</span></p>
+              <p><strong>Email:</strong> <span id="userEmail">-</span></p>
+              <p>
+                <strong>Full Name:</strong> <span id="userFullName">-</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Membership Status Card -->
+          <div class="dashboard-card membership-status-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h3 style="margin: 0;">🎫 Membership Status</h3>
+              <button onclick="refreshMembershipStatus()" class="refresh-btn">
+                🔄 Refresh
+              </button>
+            </div>
+            <div id="membershipStatusDisplay" class="membership-status-display">
+              <div class="status-loading">
+                <p>Loading membership information...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- BMI Calculator Card -->
+          <div class="dashboard-card">
+            <h3>📊 BMI Calculator</h3>
+            <form id="bmiForm" class="bmi-form">
+              <div class="form-group">
+                <label for="height">Height (cm)</label>
+                <input type="number" id="height" name="height" required />
+              </div>
+              <div class="form-group">
+                <label for="weight">Weight (kg)</label>
+                <input type="number" id="weight" name="weight" required />
+              </div>
+              <button type="submit" class="btn">Calculate & Save</button>
+            </form>
+            <div id="bmiResult" class="bmi-result"></div>
+          </div>
+
+          <!-- BMI History Card -->
+          <div class="dashboard-card">
+            <h3>📈 BMI History</h3>
+            <div id="bmiHistory" class="bmi-history">
+              <p>No BMI records yet. Calculate your BMI to see your history.</p>
+            </div>
+          </div>
+
+          <!-- Payment Status Card -->
+          <div class="dashboard-card">
+            <h3>💳 Payment Status</h3>
+            <div id="paymentStatus" class="payment-status">
+              <p>Loading payment information...</p>
+            </div>
+          </div>
+
+          <!-- Membership History Card -->
+          <div class="dashboard-card">
+            <h3>📋 Membership History</h3>
+            <div id="membershipHistory" class="membership-history">
+              <p>Loading membership history...</p>
+            </div>
+          </div>
+
+          <!-- Quick Actions Card -->
+          <div class="dashboard-card">
+            <h3>⚡ Quick Actions</h3>
+            <div class="quick-actions">
+              <a href="index.html#plans" class="btn btn-secondary"
+                >View Plans</a
+              >
+              <a href="index.html#trainers" class="btn btn-secondary"
+                >Meet Trainers</a
+              >
+              <a href="index.html#contact" class="btn btn-secondary"
+                >Contact Support</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div id="message" class="message"></div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Ghost Fitness. All rights reserved.</p>
+    </footer>
+
+    <script>
+      // API Configuration
+      const API_BASE_URL = "http://localhost:8000/api";
+
+      // Check if user is logged in
+      function checkAuth() {
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        const user = localStorage.getItem("user");
+
+        if (!isLoggedIn || !user) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        // Display user information
+        const userData = JSON.parse(user);
+        document.getElementById("userName").textContent =
+          userData.full_name || userData.username;
+        document.getElementById("userUsername").textContent = userData.username;
+        document.getElementById("userEmail").textContent = userData.email;
+        document.getElementById("userFullName").textContent =
+          userData.full_name;
+        
+        // Load membership status
+        loadMembershipStatus(userData.id);
+
+          // Load BMI history
+          loadBMIHistory(userData.id);
+          
+          // Load payment status and membership history
+          loadPaymentStatus(userData.id);
+          loadMembershipHistory(userData.id);
+        }
+
+        // Calculate remaining time from end date
+        function calculateRemainingTime(endDate) {
+          if (!endDate) {
+            return { text: "N/A", color: "#666" };
+          }
+          
+          const now = new Date();
+          const timeDiff = endDate.getTime() - now.getTime();
+          const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+          
+          if (daysDiff < 0) {
+            return { text: "Expired", color: "#ff4444" };
+          } else if (daysDiff === 0) {
+            return { text: "Expires today", color: "#ff8800" };
+          } else if (daysDiff <= 7) {
+            return { text: `${daysDiff} days remaining`, color: "#ff8800" };
+          } else if (daysDiff <= 30) {
+            const weeks = Math.ceil(daysDiff / 7);
+            return { text: `${weeks} weeks remaining`, color: "#ffaa00" };
+          } else {
+            const months = Math.ceil(daysDiff / 30);
+            return { text: `${months} months remaining`, color: "#00aa00" };
+          }
+        }
+
+        // Load and display membership status prominently
+        async function loadMembershipStatus(userId) {
+          try {
+            const response = await fetch(
+              `${API_BASE_URL}/user/membership?user_id=${userId}`
+            );
+            const data = await response.json();
+
+            const statusDiv = document.getElementById("membershipStatusDisplay");
+
+            if (data.success && data.membership) {
+              const membership = data.membership;
+              const startDate = new Date(membership.start_date);
+              const endDate = membership.end_date ? new Date(membership.end_date) : null;
+              const remainingTime = calculateRemainingTime(endDate);
+              
+              let statusHTML = '';
+              
+              if (membership.status === 'active') {
+                statusHTML = `
+                  <div class="status-active">
+                    <span class="status-icon">✅</span>
+                    <div class="status-title">ACTIVE MEMBERSHIP</div>
+                    <div class="status-subtitle">${membership.plan_type.toUpperCase()} Plan</div>
+                    <div class="status-details">
+                      <strong>Duration:</strong> ${membership.duration || 'N/A'}<br>
+                      <strong>Start Date:</strong> ${startDate.toLocaleDateString()}<br>
+                      ${endDate ? `<strong>End Date:</strong> ${endDate.toLocaleDateString()}<br>` : ''}
+                      <strong>Remaining:</strong> ${remainingTime.text}<br>
+                      <strong>Payment Status:</strong> ${membership.payment_status.toUpperCase()}
+                    </div>
+                  </div>
+                `;
+              } else if (membership.status === 'pending') {
+                statusHTML = `
+                  <div class="status-pending">
+                    <span class="status-icon">⏳</span>
+                    <div class="status-title">PENDING APPROVAL</div>
+                    <div class="status-subtitle">${membership.plan_type.toUpperCase()} Plan</div>
+                    <div class="status-details">
+                      <strong>Duration:</strong> ${membership.duration || 'N/A'}<br>
+                      <strong>Request Date:</strong> ${startDate.toLocaleDateString()}<br>
+                      <strong>Amount:</strong> $${membership.price}<br>
+                      <strong>Status:</strong> Awaiting admin approval<br>
+                      <em>We'll notify you once your membership is activated!</em>
+                    </div>
+                  </div>
+                `;
+              } else if (membership.status === 'rejected') {
+                statusHTML = `
+                  <div class="status-rejected">
+                    <span class="status-icon">❌</span>
+                    <div class="status-title">MEMBERSHIP REJECTED</div>
+                    <div class="status-subtitle">${membership.plan_type.toUpperCase()} Plan</div>
+                    <div class="status-details">
+                      <strong>Request Date:</strong> ${startDate.toLocaleDateString()}<br>
+                      <strong>Amount:</strong> $${membership.price}<br>
+                      <strong>Status:</strong> Payment was not approved<br>
+                      <em>Please contact support for assistance.</em>
+                    </div>
+                  </div>
+                `;
+              }
+              
+              statusDiv.innerHTML = statusHTML;
+            } else {
+              statusHTML = `
+                <div class="status-none">
+                  <span class="status-icon">🎫</span>
+                  <div class="status-title">NO ACTIVE MEMBERSHIP</div>
+                  <div class="status-subtitle">Get Started Today!</div>
+                  <div class="status-details">
+                    You don't have an active membership yet.<br>
+                    Choose a plan that fits your fitness goals!
+                  </div>
+                </div>
+              `;
+              statusDiv.innerHTML = statusHTML;
+            }
+          } catch (error) {
+            console.error("Error loading membership status:", error);
+            document.getElementById("membershipStatusDisplay").innerHTML = 
+              '<div class="status-loading"><p>Error loading membership information.</p></div>';
+          }
+        }
+
+        // Refresh membership status
+        function refreshMembershipStatus() {
+          const user = localStorage.getItem("user");
+          if (user) {
+            const userData = JSON.parse(user);
+            loadMembershipStatus(userData.id);
+          }
+        }
+
+      // Load BMI history
+      async function loadBMIHistory(userId) {
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/user/bmi-history?user_id=${userId}`
+          );
+          const data = await response.json();
+
+          const historyDiv = document.getElementById("bmiHistory");
+
+          if (data.success && data.records.length > 0) {
+            let historyHTML = '<div class="history-list">';
+            data.records.forEach((record) => {
+              const date = new Date(record.recorded_at).toLocaleDateString();
+              historyHTML += `
+                <div class="history-item">
+                  <div class="history-date">${date}</div>
+                  <div class="history-details">
+                    <span>BMI: ${record.bmi.toFixed(2)}</span>
+                    <span>(${record.category})</span>
+                  </div>
+                </div>
+              `;
+            });
+            historyHTML += "</div>";
+            historyDiv.innerHTML = historyHTML;
+          } else {
+            historyDiv.innerHTML =
+              "<p>No BMI records yet. Calculate your BMI to see your history.</p>";
+          }
+        } catch (error) {
+          console.error("Error loading BMI history:", error);
+        }
+      }
+
+      // Load payment status
+      async function loadPaymentStatus(userId) {
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/user/membership?user_id=${userId}`
+          );
+          const data = await response.json();
+
+          const statusDiv = document.getElementById("paymentStatus");
+
+          if (data.success && data.membership) {
+            const membership = data.membership;
+            const statusColor = membership.status === 'active' ? '#28a745' : 
+                               membership.status === 'pending' ? '#ffc107' : '#dc3545';
+            const statusIcon = membership.status === 'active' ? '✅' : 
+                              membership.status === 'pending' ? '⏳' : '❌';
+            
+            let statusHTML = `
+              <div class="payment-status-item">
+                <div class="status-header">
+                  <span class="status-icon">${statusIcon}</span>
+                  <span class="status-text" style="color: ${statusColor}; font-weight: bold;">
+                    ${membership.status.toUpperCase()}
+                  </span>
+                </div>
+                <div class="status-details">
+                  <p><strong>Plan:</strong> ${membership.plan_type}</p>
+                  <p><strong>Duration:</strong> ${membership.duration || 'N/A'}</p>
+                  <p><strong>Price:</strong> $${membership.price}</p>
+                  <p><strong>Payment Status:</strong> 
+                    <span style="color: ${membership.payment_status === 'paid' ? '#28a745' : '#ffc107'};">
+                      ${membership.payment_status.toUpperCase()}
+                    </span>
+                  </p>
+            `;
+            
+            if (membership.status === 'pending') {
+              statusHTML += `
+                <div class="pending-notice" style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                  <p style="margin: 0; color: #856404;">
+                    <strong> Payment Under Review</strong><br>
+                    Your payment is being verified. You'll be notified once approved.
+                  </p>
+                </div>
+              `;
+            } else if (membership.status === 'rejected') {
+              statusHTML += `
+                <div class="rejected-notice" style="background: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                  <p style="margin: 0; color: #721c24;">
+                    <strong> Payment Rejected</strong><br>
+                    Please contact support for assistance.
+                  </p>
+                </div>
+              `;
+            }
+            
+            statusHTML += `
+                </div>
+              </div>
+            `;
+            
+            statusDiv.innerHTML = statusHTML;
+          } else {
+            statusDiv.innerHTML = `
+              <div class="status-none">
+                <span class="status-icon">💳</span>
+                <div class="status-title">NO PAYMENT INFORMATION</div>
+                <div class="status-subtitle">No Recent Payments</div>
+                <div class="status-details">
+                  No payment information available.<br>
+                  Your payment history will appear here once you make a purchase.
+                </div>
+              </div>
+            `;
+          }
+        } catch (error) {
+          console.error("Error loading payment status:", error);
+          document.getElementById("paymentStatus").innerHTML = 
+            "<p>Error loading payment information.</p>";
+        }
+      }
+
+      // Load membership history
+      async function loadMembershipHistory(userId) {
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/user/memberships?user_id=${userId}`
+          );
+          const data = await response.json();
+
+          const historyDiv = document.getElementById("membershipHistory");
+
+          if (data.success && data.memberships.length > 0) {
+            let historyHTML = '<div class="membership-list">';
+            data.memberships.forEach((membership) => {
+              const startDate = new Date(membership.start_date).toLocaleDateString();
+              const endDate = membership.end_date ? new Date(membership.end_date).toLocaleDateString() : 'N/A';
+              const statusColor = membership.status === 'active' ? '#28a745' : 
+                                 membership.status === 'pending' ? '#ffc107' : '#dc3545';
+              
+              historyHTML += `
+                <div class="membership-item" style="border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 8px; background: #f9f9f9;">
+                  <div class="membership-header">
+                    <span class="membership-plan" style="font-weight: bold; font-size: 1.1em;">${membership.plan_type}</span>
+                    <span class="membership-status" style="color: ${statusColor}; font-weight: bold; float: right;">
+                      ${membership.status.toUpperCase()}
+                    </span>
+                  </div>
+                  <div class="membership-details" style="margin-top: 8px; font-size: 0.9em; color: #666;">
+                    <p><strong>Duration:</strong> ${membership.duration || 'N/A'}</p>
+                    <p><strong>Price:</strong> $${membership.price}</p>
+                    <p><strong>Start Date:</strong> ${startDate}</p>
+                    <p><strong>End Date:</strong> ${endDate}</p>
+                    <p><strong>Payment Status:</strong> 
+                      <span style="color: ${membership.payment_status === 'paid' ? '#28a745' : '#ffc107'};">
+                        ${membership.payment_status.toUpperCase()}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              `;
+            });
+            historyHTML += "</div>";
+            historyDiv.innerHTML = historyHTML;
+          } else {
+            historyDiv.innerHTML = 
+              "<p>No membership history found. <a href='index.html#plans'>View available plans</a></p>";
+          }
+        } catch (error) {
+          console.error("Error loading membership history:", error);
+          document.getElementById("membershipHistory").innerHTML = 
+            "<p>Error loading membership history.</p>";
+        }
+      }
+
+      // BMI Calculator
+      document
+        .getElementById("bmiForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const height = parseFloat(document.getElementById("height").value);
+          const weight = parseFloat(document.getElementById("weight").value);
+          const user = JSON.parse(localStorage.getItem("user"));
+          const messageDiv = document.getElementById("message");
+          const resultDiv = document.getElementById("bmiResult");
+
+          if (isNaN(height) || isNaN(weight)) {
+            resultDiv.innerHTML =
+              '<div class="error">Please enter valid height and weight.</div>';
+            return;
+          }
+
+          const heightInMeters = height / 100;
+          const bmi = weight / (heightInMeters * heightInMeters);
+
+          let category = "";
+          if (bmi < 18.5) category = "Underweight";
+          else if (bmi < 24.9) category = "Normal weight";
+          else if (bmi < 29.9) category = "Overweight";
+          else category = "Obese";
+
+          // Display result
+          resultDiv.innerHTML = `
+          <div class="success">
+            <h4>Your BMI Result:</h4>
+            <p><strong>BMI:</strong> ${bmi.toFixed(2)}</p>
+            <p><strong>Category:</strong> ${category}</p>
+          </div>
+        `;
+
+          // Save to database
+          try {
+            const response = await fetch(`${API_BASE_URL}/bmi`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                user_id: user.id,
+                height: height,
+                weight: weight,
+                bmi: bmi,
+                category: category,
+              }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              messageDiv.innerHTML = `<div class="success">${data.message}</div>`;
+              messageDiv.style.display = "block";
+
+              // Reload BMI history
+              loadBMIHistory(user.id);
+
+              // Clear form
+              document.getElementById("bmiForm").reset();
+            } else {
+              messageDiv.innerHTML = `<div class="error">${data.message}</div>`;
+              messageDiv.style.display = "block";
+            }
+          } catch (error) {
+            messageDiv.innerHTML = `<div class="error">Failed to save BMI record. Please try again.</div>`;
+            messageDiv.style.display = "block";
+          }
+        });
+
+      // Logout functionality
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          localStorage.removeItem("user");
+          localStorage.removeItem("isLoggedIn");
+          window.location.href = "index.html";
+        });
+
+      // Mobile menu toggle
+      document.getElementById("menu-toggle").addEventListener("click", () => {
+        document.querySelector("nav ul").classList.toggle("show");
+      });
+
+      // Initialize dashboard
+      checkAuth();
+    </script>
+  </body>
+</html>

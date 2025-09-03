@@ -1,0 +1,568 @@
+<!--
+  File: buy-membership.html
+  Purpose: Page for purchasing a membership, payment steps, and confirmation.
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buy Membership - Ghost Fitness</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffd900;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .checkout-step {
+        display: none;
+      }
+      .checkout-step.active {
+        display: block;
+      }
+
+      h2 {
+        text-align: center;
+        color: #ffd900;
+        font-size: 2.5em;
+        font-weight: bold;
+        margin-bottom: 30px;
+      }
+
+      h3 {
+        color: #ffd900;
+        font-size: 1.5em;
+        margin-top: 30px;
+        margin-bottom: 15px;
+      }
+
+      #planDetails,
+      #userDetails {
+        text-align: left;
+        margin-bottom: 15px;
+        color: #ffd900;
+        font-size: 1.1em;
+      }
+
+      label {
+        color: #ffd900;
+        font-size: 1.1em;
+        margin-bottom: 10px;
+        display: block;
+        font-weight: bold;
+      }
+
+      select {
+        background-color: #000000;
+        color: #ffd900;
+        border: 2px solid #ffd900;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 1em;
+        margin-bottom: 20px;
+        width: 200px;
+      }
+
+      .summary-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+        border: 2px solid #ffd900;
+      }
+      .summary-table td,
+      .summary-table th {
+        border: 1px solid #ffd900;
+        padding: 12px;
+        text-align: left;
+      }
+      .summary-table th {
+        background: #000000;
+        color: #ffd900;
+        font-weight: bold;
+      }
+      .summary-table td {
+        background: #000000;
+        color: #ffffff;
+      }
+
+      .center {
+        text-align: center;
+      }
+
+      .membership-container {
+        max-width: 400px;
+        margin: 40px auto;
+        padding: 30px 20px;
+        background: #000000;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(255, 217, 0, 0.2);
+        text-align: center;
+        border: 2px solid #ffd900;
+      }
+
+      .qr-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+      .qr-image {
+        width: 260px;
+        max-width: 90%;
+        height: auto;
+        border: 4px solid #ffd900;
+        border-radius: 10px;
+        margin-bottom: 16px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(255, 217, 0, 0.3);
+      }
+      .qr-details {
+        font-size: 1.05em;
+        color: #ffd900;
+        background: #000000;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(255, 217, 0, 0.2);
+        border: 1px solid #ffd900;
+      }
+
+      /* Updated button styles */
+      button {
+        background-color: #d3d3d3;
+        color: #000000;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 5px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 10px 5px;
+
+      }
+
+      button:hover {
+        background-color: #b0b0b0;
+
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Form styling */
+      .payment-form {
+        background: #000000;
+        padding: 20px;
+        border-radius: 10px;
+        border: 2px solid #ffd900;
+        margin: 20px 0;
+      }
+
+      .payment-form input {
+        background-color: #000000;
+        color: #ffffff;
+        border: 2px solid #ffd900;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 1em;
+        margin-bottom: 15px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .payment-form input:focus {
+        outline: none;
+        border-color: #ffed4e;
+        box-shadow: 0 0 5px rgba(255, 217, 0, 0.5);
+      }
+
+      .payment-form label {
+        color: #ffd900;
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      /* Success message styling */
+      #successMessage {
+        background-color: #000000;
+        border: 2px solid #28a745;
+        color: #28a745;
+      }
+
+      /* Error message styling */
+      #paymentMessage div {
+        background-color: #000000;
+        border: 2px solid #dc3545;
+        color: #dc3545;
+      }
+
+      /* Header styling */
+      header {
+        background-color: #000000;
+        padding: 20px;
+        text-align: center;
+        border-bottom: 3px solid #ffd900;
+      }
+
+      .logo {
+        color: #ffd900;
+        font-size: 2.5em;
+        font-weight: bold;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Footer styling */
+      footer {
+        background-color: #000000;
+        color: #ffd900;
+        text-align: center;
+        padding: 20px;
+        border-top: 2px solid #ffd900;
+        margin-top: 50px;
+      }
+
+      /* List styling */
+      ol {
+        color: #ffffff;
+        text-align: left;
+        margin-left: 20px;
+      }
+
+      ol li {
+        margin-bottom: 10px;
+        line-height: 1.5;
+      }
+
+      /* Link styling */
+      .btn {
+        display: inline-block;
+        background-color: #d3d3d3;
+        color: #000000;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+
+      }
+
+      .btn:hover {
+        background-color: #b0b0b0;
+
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      p {
+        color: #ffffff;
+        text-align: center;
+        font-size: 1.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Main navigation bar: logo only for this page -->
+    <header>
+      <h1 class="logo">GHOST FITNESS</h1>
+    </header>
+    <main class="container">
+      <!-- Step 1: Order Summary Section -->
+      <section id="step-summary" class="checkout-step active">
+        <h2>Order Summary</h2>
+        <div id="planDetails"></div>
+        <div id="userDetails"></div>
+        <label for="durationSelect"
+          ><strong>Select Membership Duration:</strong></label
+        >
+        <select id="durationSelect">
+          <option value="1 month">1 Month</option>
+          <option value="3 months">3 Months</option>
+          <option value="6 months">6 Months</option>
+          <option value="1 year">1 Year</option>
+        </select>
+        <table class="summary-table">
+          <tr>
+            <th>Plan</th>
+            <td id="summaryPlan"></td>
+          </tr>
+          <tr>
+            <th>Duration</th>
+            <td id="summaryDuration"></td>
+          </tr>
+          <tr>
+            <th>Price</th>
+            <td id="summaryPrice"></td>
+          </tr>
+        </table>
+        <button id="proceedToPaymentBtn">Proceed to Payment</button>
+      </section>
+      <!-- Step 2: Payment Section -->
+      <section id="step-payment" class="checkout-step">
+        <h2>Buy Membership</h2>
+        <div class="qr-section">
+          <img
+            src="qr.jpg.jpeg"
+            alt="QR Code for Membership Payment"
+            class="qr-image"
+          />
+          <div class="qr-details">
+            <strong>Bank:</strong> Saurashtra Gramin Bank 1754<br />
+            <strong>UPI ID:</strong> punitparmar366-1@okicici
+          </div>
+        </div>
+        <h3>After Payment Instructions</h3>
+        <ol>
+          <li>
+            After you complete the payment, take a screenshot or note your
+            transaction ID.
+          </li>
+          <li>
+            Submit your payment details using the form below or send them to us
+            on WhatsApp/email.
+          </li>
+          <li>
+            We will verify your payment and activate your membership within a
+            few hours.
+          </li>
+        </ol>
+
+        <h3>Submit Your Payment Details</h3>
+        <form id="paymentForm" class="payment-form">
+          <label for="name">Your Name:</label>
+          <input type="text" name="name" id="name" required />
+
+          <label for="email">Your Email:</label>
+          <input type="email" name="email" id="email" required />
+
+          <label for="txn">Transaction ID:</label>
+          <input type="text" name="txn" id="txn" required />
+
+          <label for="screenshot">Upload Screenshot (optional):</label>
+          <input type="file" name="screenshot" id="screenshot" />
+
+          <button type="submit">Submit Payment Details</button>
+        </form>
+        <div
+          id="paymentMessage"
+          style="margin-top: 10px; padding: 10px; border-radius: 5px"
+        ></div>
+        <div
+          id="successMessage"
+          style="display: none; margin-top: 20px; text-align: center"
+        >
+          <div
+            style="
+              background-color: #000000;
+              color: #28a745;
+              border: 2px solid #28a745;
+              padding: 20px;
+              border-radius: 8px;
+              margin-bottom: 15px;
+            "
+          >
+            <div style="font-size: 48px; color: #28a745; margin-bottom: 10px">
+              ✓
+            </div>
+            <h3 style="color: #28a745; margin: 0 0 10px 0">
+              Payment Details Submitted Successfully!
+            </h3>
+            <p style="margin: 0; font-size: 16px; color: #ffffff">
+              We will verify your payment and activate your membership within a
+              few hours.
+            </p>
+          </div>
+        </div>
+        <button id="backToSummaryBtn">Back</button>
+        <button id="confirmPaymentBtn">I have paid</button>
+      </section>
+      <!-- Step 3: Confirmation Section -->
+      <section id="step-confirmation" class="checkout-step">
+        <h2>Thank You!</h2>
+        <p>Your membership purchase is complete.</p>
+        <div
+          id="confirmationDetails"
+          style="color: #ffffff; text-align: center; margin: 20px 0"
+        ></div>
+        <a href="dashboard.html" class="btn">Go to Dashboard</a>
+      </section>
+    </main>
+    <!-- Footer: copyright -->
+    <footer>
+      <p>&copy; 2025 Ghost Fitness. All rights reserved.</p>
+    </footer>
+    <script>
+      // Price table for plans/durations and step navigation helpers
+      const priceTable = {
+        BASIC: {
+          "1 month": 2400,
+          "3 months": 6900,
+          "6 months": 13800,
+          "1 year": 24200,
+        },
+        PREMIUM: {
+          "1 month": 4100,
+          "3 months": 11900,
+          "6 months": 23000,
+          "1 year": 41000,
+        },
+        VIP: { "1 month": 8300, "3 months": 24900, "6 months": 47200, "1 year": 83000 },
+      };
+      // Step navigation helpers
+      function showStep(stepId) {
+        document
+          .querySelectorAll(".checkout-step")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(stepId).classList.add("active");
+      }
+      // Get user and plan
+      const user = localStorage.getItem("user");
+      if (!user) window.location.href = "login.html";
+      const userData = JSON.parse(user);
+      const urlParams = new URLSearchParams(window.location.search);
+      const plan = urlParams.get("plan") || "BASIC";
+      // Fill summary step with user and plan info
+      document.getElementById(
+        "planDetails"
+      ).innerHTML = `<strong>Selected Plan:</strong> ${plan}`;
+      document.getElementById(
+        "userDetails"
+      ).innerHTML = `<strong>User:</strong> ${
+        userData.full_name || userData.username
+      } (${userData.email})`;
+      document.getElementById("summaryPlan").textContent = plan;
+      document.getElementById("summaryDuration").textContent =
+        document.getElementById("durationSelect").value;
+      document.getElementById("summaryPrice").textContent =
+        "₹" + priceTable[plan][document.getElementById("durationSelect").value].toLocaleString('en-IN');
+      // Update summary price/duration on change
+      document
+        .getElementById("durationSelect")
+        .addEventListener("change", function () {
+          document.getElementById("summaryDuration").textContent = this.value;
+          document.getElementById("summaryPrice").textContent =
+            "₹" + priceTable[plan][this.value].toLocaleString('en-IN');
+        });
+      // Proceed to payment and payment confirmation
+      document
+        .getElementById("proceedToPaymentBtn")
+        .addEventListener("click", function () {
+          const duration = document.getElementById("durationSelect").value;
+          showStep("step-payment");
+          // Generate QR code
+          const paymentString = `PAYMENT_FOR_GHOST_FITNESS_${plan}_${duration}_$${priceTable[plan][duration]}`;
+          const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(
+            paymentString
+          )}`;
+          // Note: qrCode element doesn't exist, so we'll skip that line
+          document.getElementById("confirmPaymentBtn").dataset.duration =
+            duration;
+          document.getElementById("confirmPaymentBtn").dataset.price =
+            priceTable[plan][duration];
+        });
+      // Back to summary
+      document
+        .getElementById("backToSummaryBtn")
+        .addEventListener("click", function () {
+          showStep("step-summary");
+        });
+      // Payment form submission
+      document
+        .getElementById("paymentForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const formData = {
+            username: userData.username,
+            plan_type: plan,
+            duration: document.getElementById("durationSelect").value,
+            customer_name: document.getElementById("name").value,
+            customer_email: document.getElementById("email").value,
+            transaction_id: document.getElementById("txn").value,
+            screenshot_path: "", // For now, we'll handle file uploads separately if needed
+          };
+
+          try {
+            const res = await fetch(
+              "http://localhost:8000/api/submit_payment",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+              }
+            );
+            const data = await res.json();
+
+            if (data.success) {
+              // Hide the form and show success message
+              document.getElementById("paymentForm").style.display = "none";
+              document.getElementById("successMessage").style.display = "block";
+
+              // Clear any previous error messages
+              document.getElementById("paymentMessage").innerHTML = "";
+
+              // Store payment info for confirmation step
+              localStorage.setItem(
+                "pendingPayment",
+                JSON.stringify({
+                  plan_type: plan,
+                  duration: formData.duration,
+                  price: priceTable[plan][formData.duration],
+                  transaction_id: formData.transaction_id,
+                })
+              );
+              
+
+            } else {
+              document.getElementById("paymentMessage").innerHTML =
+                '<div style="background-color: #000000; color: #dc3545; border: 2px solid #dc3545; padding: 10px; border-radius: 5px;">Error: ' +
+                data.message +
+                "</div>";
+            }
+          } catch (error) {
+            document.getElementById("paymentMessage").innerHTML =
+              '<div style="background-color: #000000; color: #dc3545; border: 2px solid #dc3545; padding: 10px; border-radius: 5px;">Error submitting payment details. Please try again.</div>';
+          }
+        });
+
+      // Payment confirmation
+      document
+        .getElementById("confirmPaymentBtn")
+        .addEventListener("click", function () {
+          const duration = this.dataset.duration;
+          const price = this.dataset.price;
+          
+          // Get the pending payment info from localStorage
+          const pendingPayment = JSON.parse(localStorage.getItem("pendingPayment") || "{}");
+          
+          // Store membership info with pending status
+          localStorage.setItem(
+            "membership",
+            JSON.stringify({ 
+              plan, 
+              duration, 
+              price, 
+              status: "pending",
+              transaction_id: pendingPayment.transaction_id 
+            })
+          );
+          
+          // Show confirmation step
+          showStep("step-confirmation");
+          document.getElementById("confirmationDetails").innerHTML = `
+          <strong>Plan:</strong> ${plan}<br>
+          <strong>Duration:</strong> ${duration}<br>
+          <strong>Price:</strong> ₹${price.toLocaleString('en-IN')}<br>
+          <strong>Status:</strong> Pending Approval<br>
+          <strong>Transaction ID:</strong> ${pendingPayment.transaction_id || "N/A"}
+        `;
+        });
+    </script>
+  </body>
+</html>

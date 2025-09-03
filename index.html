@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ghost Fitness</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1 class="logo">GHOST FITNESS</h1>
+      <button id="menu-toggle" aria-label="Toggle menu">☰</button>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#plans">Plans</a></li>
+          <li><a href="#trainers">Trainers</a></li>
+          <li><a href="#bmi">BMI</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="login.html" id="loginLink">Login</a></li>
+          <li><a href="register.html" id="registerLink">Register</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home" class="hero">
+        <div class="hero-content">
+          <h2>WELCOME TO GHOST FITNESS</h2>
+          <p>YOUR TRANSFORMATION STARTS HERE.</p>
+          <a href="#plans" class="btn">VIEW PLANS</a>
+        </div>
+      </section>
+      <section id="plans" class="container">
+        <h2>MEMBERSHIP PLANS</h2>
+        <div class="cards">
+          <div class="card">
+            <h3>BASIC</h3>
+            <h4>₹2,400/month</h4>
+            <ul>
+              <li>Full gym access</li>
+              <li>Locker room</li>
+              <li>Open 24/7</li>
+            </ul>
+            <a href="#" class="btn" onclick="buyMembership('BASIC')">BUY MEMBERSHIP</a>
+          </div>
+          <div class="card">
+            <h3>PREMIUM</h3>
+            <h4>₹4,100/month</h4>
+            <ul>
+              <li>Full gym access</li>
+              <li>Locker room & Sauna</li>
+              <li>Personal trainer session</li>
+              <li>Open 24/7</li>
+            </ul>
+            <a href="#" class="btn" onclick="buyMembership('PREMIUM')">BUY MEMBERSHIP</a>
+          </div>
+          <div class="card">
+            <h3>VIP</h3>
+            <h4>₹8,300/month</h4>
+            <ul>
+              <li>Full gym access</li>
+              <li>Locker room & Sauna</li>
+              <li>Unlimited personal trainer</li>
+              <li>Smoothie bar credit</li>
+              <li>Open 24/7</li>
+            </ul>
+            <a href="#" class="btn" onclick="buyMembership('VIP')">BUY MEMBERSHIP</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="trainers" class="container">
+        <h2>OUR TRAINERS</h2>
+        <div class="cards">
+          <div class="card">
+            <div class="trainer-circle">
+              <span>RS</span>
+            </div>
+            <h3>RAVI SHARMA</h3>
+            <p>BODYBUILDING COACH</p>
+          </div>
+          <div class="card">
+            <div class="trainer-circle">
+              <span>AM</span>
+            </div>
+            <h3>ANJALI MEHTA</h3>
+            <p>YOGA EXPERT</p>
+          </div>
+          <div class="card">
+            <div class="trainer-circle">
+              <span>JC</span>
+            </div>
+            <h3>JOHN CARTER</h3>
+            <p>CROSSFIT EXPERT</p>
+          </div>
+        </div>
+      </section>
+      <style>
+        .trainer-circle {
+          width: 120px;
+          height: 120px;
+          background-color: #000000;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 20px;
+          color: #FFD700;
+          font-size: 36px;
+          font-weight: bold;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          border: 2px solid #FFD700;
+        }
+        .trainer-circle span {
+          line-height: 1;
+        }
+      </style>
+
+      <section id="bmi" class="container">
+        <h2>BMI CALCULATOR</h2>
+        <input type="number" id="height" placeholder="Height (cm)" />
+        <input type="number" id="weight" placeholder="Weight (kg)" />
+        <button onclick="calculateBMI()">CALCULATE</button>
+        <p id="bmiResult"></p>
+      </section>
+
+      <section id="contact" class="container">
+        <h2>CONTACT US</h2>
+        <form id="contactForm">
+          <input type="text" placeholder="Your Name" required />
+          <input type="email" placeholder="Your Email" required />
+          <textarea placeholder="Your Message" rows="5" required></textarea>
+          <button type="submit">SEND</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Ghost Fitness. All rights reserved.</p>
+    </footer>
+    
+    <!-- Floating Action Button -->
+    <a href="#plans" class="fab" title="View Plans">💪</a>
+
+    <script src="script.js"></script>
+    <script>
+    function buyMembership(plan) {
+      window.location.href = `buy-membership.html?plan=${encodeURIComponent(plan)}`;
+    }
+    </script>
+  </body>
+</html>
